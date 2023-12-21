@@ -1,0 +1,194 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+           .navbar {
+    background-color: rgb(147, 124, 224);
+    overflow: hidden;
+    height: 80px; /* Increase navbar height */
+    position: relative;
+}
+
+.navbar a {
+    float: left;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    position: relative;
+    transition: transform 0.3s, border-radius 0.3s;
+}
+
+.navbar a:hover {
+    background-color: rgb(229, 129, 62);
+    transform: translateY(-5px);
+    border-radius: 50%;
+}
+    /* Style the CAPTCHA image */
+    .captcha-image {
+        max-width: 100px; /* Adjust the maximum width as needed */
+        max-height: 40px; /* Adjust the maximum height as needed */
+        margin-right: 10px;
+    background-color:  #dc3545;
+    }
+
+
+    /* Style the refresh button */
+    .refresh-button {
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+
+    .error-message {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <a class="mx-auto" href="#">Welcome to the Event Calendar!!</a>
+        </nav>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="text-center">LOGIN</h2>
+                        </div>
+                        <div class="card-body">
+                            <form id="loginForm">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                </div>
+                            </div>
+                            <img id="captcha-image" src="" alt="CAPTCHA Image" width="200" height="40">
+                            <input type="text" id="captcha" placeholder="Enter CAPTCHA">
+                                <button id="validate-captcha">Validate CAPTCHA</button>
+                        <div id="captcha-error"></div>
+                                <button type="submit" class="btn btn-primary btn-block" id="login" name="login_submit">Log In</button>
+                            </form>
+                            <p class="mt-3 text-center">Don't have an account? <a href="signup.html">Sign up here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
+            import { getDatabase, ref } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
+            import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-auth.js";
+
+            // Your web app's Firebase configuration (same as in signup.html)
+            const firebaseConfig = {
+                apiKey: "AIzaSyDWwZyIHKxVoSxNm7onExUI9ux04q4coDM",
+                authDomain: "authentication-abf91.firebaseapp.com",
+                projectId: "authentication-abf91",
+                storageBucket: "authentication-abf91.appspot.com",
+                messagingSenderId: "972135858201",
+                appId: "1:972135858201:web:8f6666889ecb503f1faa88"
+            };
+            // Initialize Firebase (same as in signup.html)
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            const auth = getAuth();
+
+            const loginForm = document.querySelector('form');
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // Prevent the form from submitting
+
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Successfully logged in
+                        alert("User logged in");
+
+                        // Redirect to the home page after successful login
+                        window.location.href = "Eventhome.html";
+                    })
+                    .catch((error) => {
+                        const errorMessage = error.message;
+                        alert(errorMessage);
+                    });
+            });
+            document.addEventListener("DOMContentLoaded", function() {
+        const captchaImage = document.getElementById("captcha-image");
+        const refreshCaptchaButton = document.getElementById("refresh-captcha");
+        const validateCaptchaButton = document.getElementById("validate-captcha");
+
+        // Initial CAPTCHA load
+        refreshCaptcha();
+
+        validateCaptchaButton.addEventListener("click", validateCaptcha);
+        refreshCaptchaButton.addEventListener("click", refreshCaptcha);
+
+        function validateCaptcha() {
+            const captchaInput = document.getElementById("captcha");
+            const captchaError = document.getElementById("captcha-error");
+
+            // Clear any previous error messages
+            captchaError.textContent = "";
+
+            // Get the value entered by the user
+            const userEnteredCaptcha = captchaInput.value;
+            
+            // Get the correct CAPTCHA value from the dataset of the image
+            const correctCaptchaValue = captchaImage.dataset.captcha;
+
+            // Check if the user-entered CAPTCHA matches the correct one
+            if (userEnteredCaptcha === correctCaptchaValue) {
+                alert("CAPTCHA is correct!");
+            } else {
+                captchaError.textContent = "CAPTCHA is incorrect. Please try again.";
+                // Optionally, refresh the CAPTCHA on error
+                refreshCaptcha();
+            }
+        }
+
+        function refreshCaptcha() {
+            const captchaValue = generateRandomCaptcha();
+            captchaImage.src = `https://via.placeholder.com/150x50?text=${captchaValue}`;
+            captchaImage.dataset.captcha = captchaValue;
+        }
+
+        function generateRandomCaptcha() {
+            const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let captcha = "";
+
+            for (let i = 0; i < 5; i++) {
+                captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+
+            return captcha;
+        }
+    });
+
+
+        </script>
+    </body>
+    </html>

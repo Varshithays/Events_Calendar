@@ -1,0 +1,141 @@
+    h2.animated-heading {
+        text-align: center;
+        color: #e07131;
+        font-family: 'Pacifico', cursive;
+        font-size: 39px;
+        /* Additional styles for animation */
+        opacity: 0;
+        animation: fadeIn 1s ease-in-out forwards;
+    }
+    .cat-dats{
+        color: black;
+    }
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Navbar styles */
+    .navbar {
+        background-color: rgb(147, 124, 224);
+        overflow: hidden;
+        height: 80px; /* Increase navbar height */
+        position: relative;
+    }
+
+    .navbar a {
+        float: left;
+        font-size: 20px;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        position: relative;
+        transition: transform 0.3s, border-radius 0.3s;
+    }
+
+    .navbar a:hover {
+        background-color: rgb(229, 129, 62);
+        transform: translateY(-5px);
+        border-radius: 50%;
+    }
+
+    /* Container styles */
+    .calendar-container {
+        width: 60%;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-top: 100px;
+        margin-bottom: 80px;
+    }
+
+    /* Heading styles */
+    h2 {
+        text-align: center;
+        color: #cd8b11; /* Change heading text color */
+        font-family: 'Pacifico', cursive; /* Use a creative font for headings */
+        font-size: 28px; /* Increase font size */
+    }
+
+    /* CSS for the animated heading */
+    .animated-heading {
+        opacity: 0;
+        animation: fadeIn 1s ease-in-out forwards;
+        color: rgb(202, 43, 226);
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Your existing styles */
+
+    /* Category Carousel styles */
+    .category-carousel {
+        display: flex;
+        overflow: auto; /* Allow scrolling if categories exceed the container width */
+    }
+
+    .category-container {
+        flex: 0 0 auto; /* Allow containers to shrink if needed */
+        margin: 10px;
+        padding: 20px;
+        font-size: 18px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+    }
+
+    .category-container:hover {
+        transform: scale(1.1);
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+   /* Add this to your stylec.css file */
+.event-details {
+    color: black; /* Set text color to black */
+}
+
+.event-item {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.event-item h3 {
+    color: #673ab7;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.event-item p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.share-button {
+    padding: 10px;
+    margin-top: 10px;
+    background-color: rgb(131, 131, 233);
+    border: none;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+}

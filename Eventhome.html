@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Calendar</title>
+    <!-- Link to Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+<!-- Include Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+        /* Navbar styles */
+.navbar {
+    background-color: rgb(147, 124, 224);
+    overflow: hidden;
+    height: 80px; /* Increase navbar height */
+    position: relative;
+}
+
+.navbar a {
+    float: left;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    position: relative;
+    transition: transform 0.3s, border-radius 0.3s;
+}
+
+.navbar a:hover {
+    background-color: rgb(229, 129, 62);
+    transform: translateY(-5px);
+    border-radius: 50%;
+}
+
+/* Rest of your styles... */
+
+
+        /* Container styles */
+        .calendar-container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 100px;
+            margin-bottom: 80px;
+        }
+
+        /* Heading styles */
+        h2 {
+            text-align: center;
+            color: #673ab7; /* Change heading text color */
+            font-family: 'Pacifico', cursive; /* Use a creative font for headings */
+            font-size: 28px; /* Increase font size */
+        }
+
+        /* Add your existing styles for form, input, and button here */
+        /* ... */
+
+        /* CSS for the animated heading */
+        .animated-heading {
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+            color: rgb(202, 43, 226);
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+       
+        /* Container styles */
+     
+     
+        .calendar-container {
+        width: 60%;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-top: 100px;
+        margin-bottom: 80px;
+    }
+
+        /* Add your existing styles for h2, form, input, and button here */
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="datetime-local"] {
+            width: 100%;
+            max-width: 250px; /* Set a maximum width for the input fields */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: rgb(131, 131, 233);
+            border: none;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        /* CSS for the animated heading */
+.animated-heading {
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+    color: rgb(202, 43, 226);
+}
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+#update{
+    background-color: blue;
+}
+#delete{
+    background-color: red;
+}
+.bg{
+    width:100%;
+    position:absolute;
+    z-index:-1;
+    opacity:0.6;
+    
+}
+
+#events{
+    margin-top: 100px;
+}
+#event-list {
+    margin-top: 50px;
+
+}
+.event-item {
+    margin-bottom: 20px;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <img  class="bg" src="bg.webp" alt="SJBIT">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">EventEase</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="categories.html">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="aboutus.html">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contactus.html">Contact Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="logout-link">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+
+<!-- Content Container -->
+<div class="calendar-container">
+    <h2 class="animated-heading">Create Event</h2>
+    <form id="event-form">
+        <div class="form-group"> <!-- Wrap the input fields in a div -->
+            <input type="text" id="eventName" name="eventName" class="form-control" placeholder="Event Name" required>
+            <input type="datetime-local" id="eventDateTime" name="eventDateTime" class="form-control" required>
+            <input type="text" id="eventLocation" name="eventLocation" class="form-control" placeholder="Event Location" required>
+            
+            <!-- Dropdown list for Event Category -->
+            <select id="eventCategory" name="eventCategory" class="form-control" required>
+                <option value="" disabled selected>Select Event Category</option>
+                <option value="workshops">Workshops</option>
+                <option value="competition">Competitions</option>
+                <option value="tech-talks">Tech Talks</option>
+                <option value="other-events">Other Events</option>
+            </select>
+        </div>
+        <div class="form-group"> <!-- Separate div for the textarea -->
+            <textarea id="eventDescription" name="eventDescription" class="form-control" placeholder="Event Description"></textarea>
+        </div>
+  
+        <button type="submit" class="btn btn-primary">ADD Event</button>
+    </form>
+</div>
+
+
+
+
+    <h2 id="events" class="animated-heading">Upcoming Events</h2><br>
+    <div class="row justify-content-around" id="event-list">
+    </div>
+
+    <!-- Firebase modules script tags here -->
+    <!-- Firebase modules script tags here -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, update, remove, get } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-auth.js"; // Import Firebase Authentication functions
+
+    // Firebase configuration (replace with your Firebase project configuration)
+    const firebaseConfig = {
+            apiKey: "AIzaSyDWwZyIHKxVoSxNm7onExUI9ux04q4coDM",
+            authDomain: "authentication-abf91.firebaseapp.com",
+            projectId: "authentication-abf91",
+            storageBucket: "authentication-abf91.appspot.com",
+            messagingSenderId: "972135858201",
+            appId: "1:972135858201:web:8f6666889ecb503f1faa88"
+        };
+    
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+
+    const user = auth.currentUser;
+
+    
+    // Event creation form
+    const eventForm = document.getElementById('event-form');
+    const eventNameInput = document.getElementById('eventName');
+    const eventDateTimeInput = document.getElementById('eventDateTime');
+    const eventLocationInput = document.getElementById('eventLocation');
+    const eventDescriptionInput = document.getElementById('eventDescription');
+
+    // Event list container
+    const eventList = document.getElementById('event-list');
+
+    // Add button
+    const addButton = document.getElementById('addButton');
+
+    // Handle event creation form submission
+          description: eventDescription
+      
+    // Handle event creation form submission
+// Handle event creation form submission
+eventForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Get form values
+    const eventName = eventNameInput.value;
+    const eventDateTime = eventDateTimeInput.value;
+    const eventLocation = eventLocationInput.value;
+    const eventDescription = eventDescriptionInput.value;
+    const eventCategory = document.getElementById('eventCategory').value; // Get the selected category
+
+    // Push event data to Firebase Realtime Database
+    const eventsRef = ref(database, 'events');
+    push(eventsRef, {
+        name: eventName,
+        dateTime: eventDateTime,
+        location: eventLocation,
+        description: eventDescription,
+        category: eventCategory  // Add category field
+    });
+
+    // Clear form inputs
+    eventNameInput.value = '';
+    eventDateTimeInput.value = '';
+    eventLocationInput.value = '';
+    eventDescriptionInput.value = '';
+
+    alert('Thank you for using the event calendar');
+});
+
+    // Display upcoming events from Firebase Realtime Database
+   
+const eventsRef = ref(database, 'events');
+onValue(eventsRef, (snapshot) => {
+    eventList.innerHTML = ''; // Clear existing event list
+
+    if (snapshot.exists()) {
+        const events = snapshot.val();
+
+        for (const eventId in events) {
+            const event = events[eventId];
+            const eventDateTime = new Date(event.dateTime);
+            const eventListItem = document.createElement('div');
+            eventListItem.className = 'event-item';
+            eventListItem.innerHTML = `
+                <h3 class="event-details"><strong>${event.name}</strong></h3>
+                <p class="event-details"><strong>Date and Time:</strong> ${eventDateTime.toLocaleString()}</p>
+                <p class="event-details"><strong>Location:</strong> ${event.location}</p>
+                <p class="event-details"><strong>Description:</strong> ${event.description}</p>
+                <p class="event-details"><strong>Category:</strong> ${event.category}</p> <!-- Display category -->
+                <button class="update-button btn btn-primary" style="background-color: green;" data-event-id="${eventId}">Update</button>
+                <button class="delete-button btn btn-danger" style="background-color: red;" data-event-id="${eventId}">Delete</button>
+            `;
+
+            eventList.appendChild(eventListItem);
+        }
+
+        // Add event listeners to update and delete buttons
+        const updateButtons = document.querySelectorAll('.btn.btn-primary');
+        const deleteButtons = document.querySelectorAll('.btn.btn-danger');
+
+
+            updateButtons.forEach((button) => {
+                button.addEventListener('click', (e) => {
+                    const eventId = e.target.getAttribute('data-event-id');
+                    const eventRef = ref(database, `events/${eventId}`);
+
+                    // Fetch the event data and populate the form fields for editing
+                    get(eventRef).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const eventData = snapshot.val();
+                            eventNameInput.value = eventData.name;
+                            eventDateTimeInput.value = eventData.dateTime;
+                            eventLocationInput.value = eventData.location;
+                            eventDescriptionInput.value = eventData.description;
+
+                            // Add an event listener to update the event on form submission
+                            eventForm.onsubmit = (e) => {
+                                e.preventDefault();
+
+                                // Get updated form values
+                                const updatedEventName = eventNameInput.value;
+                                const updatedEventDateTime = eventDateTimeInput.value;
+                                const updatedEventLocation = eventLocationInput.value;
+                                const updatedEventDescription = eventDescriptionInput.value;
+
+                                // Update the event data in the database
+                                update(eventRef, {
+                                    name: updatedEventName,
+                                    dateTime: updatedEventDateTime,
+                                    location: updatedEventLocation,
+                                    description: updatedEventDescription
+                                });
+
+                                // Clear form inputs and remove the submit event listener
+                               
+                            };
+                        }
+                    });
+                });
+            });
+
+            deleteButtons.forEach((button) => {
+                button.addEventListener('click', (e) => {
+                    const eventId = e.target.getAttribute('data-event-id');
+                    const eventRef = ref(database, `events/${eventId}`);
+
+                    // Confirm with the user before deleting
+                    if (confirm('Are you sure you want to delete this event?')) {
+                        // Delete the event from the database
+                        remove(eventRef);
+                    }
+                });
+            });
+        }
+    });
+    const logoutLink = document.getElementById('logout-link');
+
+    logoutLink.addEventListener('click', () => {
+        auth.signOut().then(() => {
+            // Redirect to home.html after successful logout
+            window.location.href = 'index.html';
+        }).catch((error) => {
+            console.error('Logout error:', error);
+        });
+    });
+    function sendEventReminders(events) {
+        const now = new Date();
+
+        for (const eventId in events) {
+            const event = events[eventId];
+            const eventDateTime = new Date(event.dateTime);
+
+            // Calculate the time difference between now and the event time
+            const timeDiff = eventDateTime - now;
+
+            // Set a threshold time for sending reminders (e.g., 30 minutes before the event)
+            const reminderThreshold = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+            if (timeDiff > 0 && timeDiff <= reminderThreshold) {
+                // Send a reminder for the event (you can customize this part)
+                alert(`Reminder: Your event "${event.name}" is starting soon at ${eventDateTime.toLocaleString()}`);
+            }
+        }
+    }
+
+    // Check for reminders periodically (e.g., every minute)
+    setInterval(() => {
+        // Fetch the events from Firebase Realtime Database
+        get(eventsRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const events = snapshot.val();
+                sendEventReminders(events);
+            }
+        });
+    }, 60 * 1000); // Check every minute
+
+</script>
+
+</body>
+</html>

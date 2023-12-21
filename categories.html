@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Include existing head content -->
+
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="stylec.css">
+  
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">EventEase</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="true" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="Eventhome.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="aboutus.html">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contactus.html">Contact Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html" id="logout-link">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content Container for Categories Page -->
+    <div class="calendar-container">
+        <h2 class="animated-heading">Categories</h2>
+
+        <!-- Category Image Containers -->
+        <div class="category-carousel">
+            <div class="category-container" data-category="workshops">
+                <img width="180px" height="200px" src="workshop.jpeg" alt="Workshops">
+            </div>
+            <div class="category-container" data-category="tech-talks">
+                <img src="tech_talks.jpeg" alt="Tech Talks">
+            </div>
+            <div class="category-container" data-category="competition">
+                <img src="competition.jpeg" alt="Competitions">
+            </div>
+            <div class="category-container" data-category="other-events">
+                <img src="other.jpeg" alt="Other Events">
+            </div>
+        </div>
+
+        <!-- Event List Container -->
+        <div id="category-details-container"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/firebase@10.3.1"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
+
+        // Firebase configuration (replace with your Firebase project configuration)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDWwZyIHKxVoSxNm7onExUI9ux04q4coDM",
+            authDomain: "authentication-abf91.firebaseapp.com",
+            projectId: "authentication-abf91",
+            storageBucket: "authentication-abf91.appspot.com",
+            messagingSenderId: "972135858201",
+            appId: "1:972135858201:web:8f6666889ecb503f1faa88"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const categoryDetailsContainer = document.getElementById('category-details-container');
+            const categoryContainers = document.querySelectorAll('.category-container');
+
+            categoryContainers.forEach((container) => {
+                container.addEventListener('click', () => {
+                    const selectedCategory = container.getAttribute('data-category');
+                    const eventsRef = ref(database, 'events');
+
+                    // Fetch events where category matches selectedCategory
+                    onValue(eventsRef, (snapshot) => {
+                        categoryDetailsContainer.innerHTML = ''; // Clear existing content
+
+                        if (snapshot.exists()) {
+                            const events = snapshot.val();
+
+                            for (const eventId in events) {
+                                const event = events[eventId];
+
+                                if (event.category === selectedCategory) {
+                                    const eventDateTime = new Date(event.dateTime);
+                                    const eventItem = document.createElement('div');
+                                    eventItem.className = 'event-item';
+                                    eventItem.innerHTML = `
+                                        <h3>${event.name}</h3>
+                                        <p><strong>Date and Time:</strong> ${eventDateTime.toLocaleString()}</p>
+                                        <p><strong>Location:</strong> ${event.location}</p>
+                                        <p><strong>Description:</strong> ${event.description}</p>
+                                        <p><strong>Category:</strong> ${event.category}</p>
+                                        <button class="share-button btn btn-success" data-event-id="${eventId}" data-share-type="whatsapp">Share on WhatsApp</button>
+                                        <button class="share-button btn btn-info" data-event-id="${eventId}" data-share-type="link">Share Event Link</button>
+                                    `;
+
+                                    categoryDetailsContainer.appendChild(eventItem);
+                                }
+                            }
+
+                            // Add event listener for the share buttons
+                            const shareButtons = document.querySelectorAll('.share-button');
+                            shareButtons.forEach((shareButton) => {
+                                shareButton.addEventListener('click', (e) => {
+                                    const eventId = e.target.getAttribute('data-event-id');
+                                    const event = events[eventId];
+                                    const shareType = e.target.getAttribute('data-share-type');
+
+                                    if (shareType === 'whatsapp') {
+                                        // Create a shareable link for WhatsApp with event details
+                                        const shareLink = `https://wa.me/?text=Event: ${event.name}%0aDate and Time: ${eventDateTime.toLocaleString()}%0aLocation: ${event.location}%0aDescription: ${event.description}%0aCategory: ${event.category}`;
+                                        window.open(shareLink);
+                                    } else if (shareType === 'link') {
+                                        // Create a shareable link to the event
+                                        const eventLink = `http://127.0.0.1:5500/event-details.html?event=${eventId}`;
+                                        // You can customize the link format based on your website structure
+                                        window.alert(`Copy the event link: ${eventLink}`);
+                                    }
+                                });
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

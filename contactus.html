@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <!-- Link to Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        /* Add custom styles if needed */
+
+        .navbar {
+    background-color: rgb(147, 124, 224);
+    overflow: hidden;
+    height: 80px; /* Increase navbar height */
+    position: relative;
+}
+
+.navbar a {
+    float: left;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    position: relative;
+    transition: transform 0.3s, border-radius 0.3s;
+}
+
+.navbar a:hover {
+    background-color: rgb(229, 129, 62);
+    transform: translateY(-5px);
+    border-radius: 50%;
+}
+        /* Contact section styles */
+        .contact-container {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Center align the content */
+        .text-center {
+            text-align: center;
+        }
+        h2 {
+            font-family: 'Arial', sans-serif; /* Change font */
+            color: #1a1a1a; /* Change color */
+            animation: fadeIn 1s ease-in-out forwards; /* Add animation */
+        }
+
+        /* Different styles for form heading */
+        .form-heading {
+            font-family: 'Georgia', serif; /* Change font */
+            color: #c16920; /* Change color */
+            animation: fadeIn 1s ease-in-out forwards; /* Add animation */
+        }
+
+        /* Your existing styles */
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar (reuse the same navbar as in other pages) -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">EventEase</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="true" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="Eventhome.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="categories.html">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="aboutus.html">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html" id="logout-link">Logout</a>
+                </li>
+              
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content Container -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="contact-container">
+                    <h2 class="form-heading">Contact Us</h2>
+                    <p>If you have any questions or need assistance, please don't hesitate to contact us.</p>
+                    <p>Email: contact@example.com</p>
+                    <p>Phone: +91 123456789</p>
+                    <!-- Add a contact form or more contact details as needed -->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="contact-container">
+                    <h2 class="form-heading">Organize an Event</h2>
+                    <p>If you have event ideas and would like to organize an event with us, please submit the details below:</p>
+                    <div id="confirmation-message" class="text-center" style="display: none;">
+                        Thank you! We will contact you soon.
+                    </div>
+       
+                    <form action="https://formspree.io/f/mgegwlon" method="POST">
+                        <div class="form-group">
+                            <label for="name">Your Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                     
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="idea">Event Idea Description:</label>
+                            <textarea class="form-control" id="idea" name="idea" rows="4" required></textarea>
+                        </div>
+                        <button id="submit" type="submit" class="btn btn-primary">Submit Idea</button>
+                    </form>
+                    
+       </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript and jQuery scripts (if needed) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to show confirmation message
+        function showConfirmation() {
+            document.getElementById('confirmation-message').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
