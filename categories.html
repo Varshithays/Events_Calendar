@@ -81,67 +81,70 @@
         const database = getDatabase(app);
 
         document.addEventListener('DOMContentLoaded', () => {
-            const categoryDetailsContainer = document.getElementById('category-details-container');
-            const categoryContainers = document.querySelectorAll('.category-container');
+    const categoryDetailsContainer = document.getElementById('category-details-container');
+    const categoryContainers = document.querySelectorAll('.category-container');
 
-            categoryContainers.forEach((container) => {
-                container.addEventListener('click', () => {
-                    const selectedCategory = container.getAttribute('data-category');
-                    const eventsRef = ref(database, 'events');
+    let eventDateTime;  // Declare eventDateTime outside the loop
 
-                    // Fetch events where category matches selectedCategory
-                    onValue(eventsRef, (snapshot) => {
-                        categoryDetailsContainer.innerHTML = ''; // Clear existing content
+    categoryContainers.forEach((container) => {
+        container.addEventListener('click', () => {
+            const selectedCategory = container.getAttribute('data-category');
+            const eventsRef = ref(database, 'events');
 
-                        if (snapshot.exists()) {
-                            const events = snapshot.val();
+            // Fetch events where category matches selectedCategory
+            onValue(eventsRef, (snapshot) => {
+                categoryDetailsContainer.innerHTML = ''; // Clear existing content
 
-                            for (const eventId in events) {
-                                const event = events[eventId];
+                if (snapshot.exists()) {
+                    const events = snapshot.val();
 
-                                if (event.category === selectedCategory) {
-                                    const eventDateTime = new Date(event.dateTime);
-                                    const eventItem = document.createElement('div');
-                                    eventItem.className = 'event-item';
-                                    eventItem.innerHTML = `
-                                        <h3>${event.name}</h3>
-                                        <p><strong>Date and Time:</strong> ${eventDateTime.toLocaleString()}</p>
-                                        <p><strong>Location:</strong> ${event.location}</p>
-                                        <p><strong>Description:</strong> ${event.description}</p>
-                                        <p><strong>Category:</strong> ${event.category}</p>
-                                        <button class="share-button btn btn-success" data-event-id="${eventId}" data-share-type="whatsapp">Share on WhatsApp</button>
-                                        <button class="share-button btn btn-info" data-event-id="${eventId}" data-share-type="link">Share Event Link</button>
-                                    `;
+                    for (const eventId in events) {
+                        const event = events[eventId];
 
-                                    categoryDetailsContainer.appendChild(eventItem);
-                                }
-                            }
+                        if (event.category === selectedCategory) {
+                            eventDateTime = new Date(event.dateTime);  // Move this line inside the loop
+                            const eventItem = document.createElement('div');
+                            eventItem.className = 'event-item';
+                            eventItem.innerHTML = `
+                                <h3>${event.name}</h3>
+                                <p><strong>Date and Time:</strong> ${eventDateTime.toLocaleString()}</p>
+                                <p><strong>Location:</strong> ${event.location}</p>
+                                <p><strong>Description:</strong> ${event.description}</p>
+                                <p><strong>Category:</strong> ${event.category}</p>
+                                <button class="share-button btn btn-success" data-event-id="${eventId}" data-share-type="whatsapp">Share on WhatsApp</button>
+                                <button class="share-button btn btn-info" data-event-id="${eventId}" data-share-type="link">Share Event Link</button>
+                            `;
 
-                            // Add event listener for the share buttons
-                            const shareButtons = document.querySelectorAll('.share-button');
-                            shareButtons.forEach((shareButton) => {
-                                shareButton.addEventListener('click', (e) => {
-                                    const eventId = e.target.getAttribute('data-event-id');
-                                    const event = events[eventId];
-                                    const shareType = e.target.getAttribute('data-share-type');
-
-                                    if (shareType === 'whatsapp') {
-                                        // Create a shareable link for WhatsApp with event details
-                                        const shareLink = `https://wa.me/?text=Event: ${event.name}%0aDate and Time: ${eventDateTime.toLocaleString()}%0aLocation: ${event.location}%0aDescription: ${event.description}%0aCategory: ${event.category}`;
-                                        window.open(shareLink);
-                                    } else if (shareType === 'link') {
-                                        // Create a shareable link to the event
-                                        const eventLink = `https://varshithays.github.io/Events_Calendar/event-details.html?event=${eventId}`;
-                                        // You can customize the link format based on your website structure
-                                        window.alert(`Copy the event link: ${eventLink}`);
-                                    }
-                                });
-                            });
+                            categoryDetailsContainer.appendChild(eventItem);
                         }
+                    }
+
+                    // Add event listener for the share buttons
+                    const shareButtons = document.querySelectorAll('.share-button');
+                    shareButtons.forEach((shareButton) => {
+                        shareButton.addEventListener('click', (e) => {
+                            const eventId = e.target.getAttribute('data-event-id');
+                            const event = events[eventId];
+                            const shareType = e.target.getAttribute('data-share-type');
+
+                            if (shareType === 'whatsapp') {
+                                // Create a shareable link for WhatsApp with event details
+                                const shareLink = `https://wa.me/?text=Event: ${event.name}%0aDate and Time: ${eventDateTime.toLocaleString()}%0aLocation: ${event.location}%0aDescription: ${event.description}%0aCategory: ${event.category}`;
+                                window.open(shareLink);
+                            } else if (shareType === 'link') {
+                                // Create a shareable link to the event
+                                const eventLink = `https://yourwebsite.com/event-details.html?event=${eventId}`;
+                                // You can customize the link format based on your website structure
+                                window.alert(`Copy the event link: ${eventLink}`);
+                            }
+                        });
                     });
-                });
+                }
             });
         });
+    });
+});
+
     </script>
 </body>
 </html>
